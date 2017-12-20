@@ -1,0 +1,203 @@
+{% load static i18n compress%}<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>{% block title %}habb{% endblock title %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <![endif]-->
+
+    {% block css %}
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="{% static 'css/compiled.min.css' %}">
+    <style>
+      .dropdown .dropdown-menu .dropdown-item:active, .dropdown .dropdown-menu .dropdown-item:focus, .dropdown .dropdown-menu .dropdown-item:hover {
+        background: #fc466b;
+      }
+      .navbar.navbar-light .breadcrumb .nav-item .nav-link, .navbar.navbar-light .navbar-nav .nav-item .nav-link {
+        color: #FFF;
+      }
+      .navbar-light .navbar-brand, .navbar-light .navbar-brand:focus, .navbar-light .navbar-brand:hover {
+        color: #FFF;
+      }
+      /*
+      * * * * { outline: 2px dotted blue }
+      * * * * * { outline: 1px solid red }
+      * * * * * * { outline: 1px solid green }
+      * * * * * * * { outline: 1px solid orange }
+      * * * * * * * * { outline: 1px solid blue }[/cc]
+      */
+    </style>
+    <!-- Your stuff: Third-party CSS libraries go here -->
+    {% compress css %}
+    {% block include_css %}
+    {% endblock include_css %}
+    <!-- This file stores project-specific CSS -->
+    <link href="{% static 'css/project.css' %}" rel="stylesheet">
+    {% endcompress %}
+    {% endblock %}
+
+  </head>
+
+  <body>
+  <!--Main Navigation-->
+  <header>
+
+      <!--Navbar-->
+      <nav class="navbar navbar-expand-lg navbar-dark fixed-top scrolling-navbar">
+          <div class="container">
+              <a class="navbar-brand" href="#"><strong>MDB</strong></a>
+              <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent-7" aria-controls="navbarSupportedContent-7" aria-expanded="false" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon"></span>
+              </button>
+              <div class="collapse navbar-collapse" id="navbarSupportedContent-7">
+                  <ul class="navbar-nav mr-auto">
+                      <li class="nav-item {% if request.path == '/'|add:LANGUAGE_CODE|add:'/'%}active{% endif %}">
+                          <a class="nav-link" href="{% url 'home' %}">Home <span class="sr-only">(current)</span></a>
+                      </li>
+                      <li class="nav-item">
+                          <a class="nav-link" href="#">Link</a>
+                      </li>
+                      <li class="nav-item {% if request.path == '/'|add:LANGUAGE_CODE|add:'/about/'%}active{% endif %}">
+                          <a class="nav-link" href="{% url 'about' %}">About</a>
+                      </li>
+                  </ul>
+
+
+                  <div class="dropdown">
+                    <button style="background: #fc466b" class="btn btn-sm dropdown-toggle" type="button" id="dropdownMenu5" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{% trans 'Accounts' %}</button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenu5">
+                    {% if not user.is_authenticated %}
+                      <a class="dropdown-item" href="{% url 'account_login' %}">{% trans 'Sign In' %}</a>
+                      <a class="dropdown-item" href="{% url 'account_signup' %}">{% trans 'Sign Up' %}</a>
+                    {% endif %}
+                      {% if user.is_authenticated %}
+                      <a class="dropdown-item" href="{% url 'account_logout' %}">{% trans 'Sign Out' %}</a>{% endif %}
+                    </div>                                   
+                  </div>
+
+                  <div class="dropdown">
+                      <button style="background: #fc466b" class="btn btn-sm dropdown-toggle" type="button" id="dropdownMenu4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        {{ LANGUAGE_CODE }}
+                      </button>
+                      <div class="dropdown-menu" aria-labelledby="dropdownMenu4">
+                          {% get_current_language as LANGUAGE_CODE %}
+                          {% get_available_languages as LANGUAGES %}
+                          {% get_language_info_list for LANGUAGES as languages %}
+                          {% for language in languages %}
+                          <a class="dropdown-item {% if language.code == LANGUAGE_CODE %}disabled{% endif %}" href="#" onclick="setLanguage('{{ language.code }}');">{{ language.name_local }} ({{ language.code }})</a>
+                          {% endfor %}
+
+                      </div>
+                  </div>
+                  <form id="languageForm" action="{% url 'set_language' %}" method="post">{% csrf_token %}
+                    <input name="next" type="hidden" value="{{ redirect_to }}" />
+                    <select name="language">
+                      <option id="languageFormOption" value="">
+                    </select>
+                  </form>
+              </div>
+          </div>
+      </nav>
+
+      {% block intro %}
+      {% endblock intro %}
+
+  </header>
+  <!--Main Navigation-->
+                
+
+
+      {% if messages %}
+          {% for message in messages %}
+              <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">{{ message }}</div>
+          {% endfor %}
+      {% endif %}
+
+      <div class="container" style="margin-top: 10rem; margin-bottom: 10rem">
+      {% block content %}
+
+      {% endblock content %}
+      </div>
+
+    {% block modal %}{% endblock modal %}
+    {% block javascript %}
+      <script type="text/javascript" src="{% static 'js/compiled.min.js' %}"></script>
+      <script>
+          new WOW().init();
+      </script>
+      <script>
+        setLanguage = function(language){
+
+          option = document.getElementById("languageFormOption");
+          option.setAttribute("value", language);
+          document.getElementById("languageForm").submit();
+
+        }
+      </script>
+      {% compress js %}
+      <script src="{% static 'js/project.js' %}"></script>
+      {% endcompress %}
+      {% block include_javascript %}
+      {% endblock include_javascript %}
+
+    {% endblock javascript %}
+
+<!--Footer-->
+<footer style="background: rgba(0, 0, 0, 0) linear-gradient(to right, rgb(252, 70, 107), rgb(63, 94, 251)) repeat scroll 0% 0%" class="page-footer center-on-small-only pt-0">
+
+    <!--Footer Links-->
+    <div class="container">
+
+        <!--First row-->
+        <div class="row">
+
+            <!--First column-->
+            <div class="col-md-12">
+
+                <div class="footer-socials mb-5 flex-center">
+                    <!--Vk-->
+                    <a class="icons-sm vk-ic"><i class="fa fa-vk fa-lg white-text mr-md-4"> </i></a>
+                    <!--Odnoklassniki-->
+                    <a class="icons-sm od-ic"><i class="fa fa-odnoklassniki fa-lg white-text mr-md-4"> </i></a>
+                    <!--Facebook-->
+                    <a class="icons-sm fb-ic"><i class="fa fa-facebook fa-lg white-text mr-md-4"> </i></a>
+                    <!--Twitter-->
+                    <a class="icons-sm tw-ic"><i class="fa fa-twitter fa-lg white-text mr-md-4"> </i></a>
+                    <!--Google +-->
+                    <a class="icons-sm gplus-ic"><i class="fa fa-google-plus fa-lg white-text mr-md-4"> </i></a>
+                    <!--Linkedin-->
+                    <a class="icons-sm li-ic"><i class="fa fa-linkedin fa-lg white-text mr-md-4"> </i></a>
+                    <!--Instagram-->
+                    <a class="icons-sm ins-ic"><i class="fa fa-instagram fa-lg white-text mr-md-4"> </i></a>
+                    <!--Pinterest-->
+                    <a class="icons-sm pin-ic"><i class="fa fa-pinterest fa-lg white-text"> </i></a>
+                </div>
+            </div>
+            <!--/First column-->
+        </div>
+        <!--/First row-->
+    </div>
+    <!--/Footer Links-->
+
+    <!--Copyright-->
+    <div class="footer-copyright">
+        <div class="container-fluid">
+            © 2016 Copyright: <a href="https://www.MDBootstrap.com"> MDBootstrap.com </a>
+        </div>
+    </div>
+    <!--/Copyright-->
+
+</footer>
+<!--/Footer-->    
+  </body>
+</html>
+ 
+
+
