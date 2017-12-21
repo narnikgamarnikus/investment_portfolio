@@ -6,41 +6,41 @@ urlpatterns = [
     url(
         regex=r'^items$',
         view=views.PortfolioItemListView.as_view(),
-        name='portfolio_item_list'
+        name='item_list'
     ),
     url(
         regex=r'^items/~create/$',
         view=views.PortfolioItemCreateView.as_view(),
-        name='portfolio_item_create'
+        name='item_create'
     ),
     url(
         regex=r'^items/(?P<pk>[\w.@+-]+)/$',
         view=views.PortfolioItemDetailView.as_view(),
-        name='portfolio_item_detail'
+        name='item_detail'
     ),
     url(
         regex=r'^items/~update/$',
         view=views.PortfolioItemUpdateView.as_view(),
-        name='portfolio_item_update'
+        name='item_update'
     ),
     url(
         regex=r'^transactions$',
         view=views.PortfolioTransactionListView.as_view(),
-        name='portfolio_item_list'
+        name='transaction_list'
     ),
     url(
         regex=r'^transactions/~create/$',
         view=views.PortfolioTransactionCreateView.as_view(),
-        name='portfolio_item_create'
+        name='transaction_create'
     ),
     url(
         regex=r'^transactions/(?P<pk>[\w.@+-]+)/$',
         view=views.PortfolioTransactionDetailView.as_view(),
-        name='portfolio_item_detail'
+        name='transaction_detail'
     ),
     url(
         regex=r'^transactions/~update/$',
         view=views.PortfolioTransactionUpdateView.as_view(),
-        name='portfolio_item_update'
+        name='transaction_update'
     ),    
 ]

@@ -23,7 +23,7 @@ class PortfolioItem(Base):
 	currency = models.ForeignKey('currencies.Currency')
 	user = models.ForeignKey(settings.AUTH_USER_MODEL)
 	amount = models.FloatField(blank=False, null=False)
-	invest_date = models.DateTimeField(blank=False, null=False)
+	invest_date = models.DateField(blank=False, null=False)
 
 
 	def __str__(self):
@@ -33,7 +33,7 @@ class PortfolioItem(Base):
 			)
 
 	def get_absolute_url(self):
-		return reverse('portfolios:portfolio_item_detail', kwargs={'pk': self.pk})
+		return reverse('portfolios:item_detail', kwargs={'pk': self.pk})
 
 
 @python_2_unicode_compatible
@@ -43,3 +43,13 @@ class PortfolioTransaction(Base):
 	transaction_type = StatusField()
 	item = models.ForeignKey(PortfolioItem, blank=False, null=False)
 	amount = models.FloatField(blank=False, null=False)
+
+
+	def __str__(self):
+		return '{}:{}'.format(
+			self.transaction_type,
+			self.amount
+			)
+
+	def get_absolute_url(self):
+		return reverse('portfolios:transaction_detail', kwargs={'pk': self.pk})

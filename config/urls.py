@@ -16,8 +16,8 @@ urlpatterns = i18n_patterns(
 
     # User management
     url(r'^users/', include('investment_portfolio.users.urls', namespace='users')),
-    url(r'^currencies/', include('investment_portfolio.currencies.urls')),
-    url(r'^portfolios/', include('investment_portfolio.portfolios.urls')),
+    url(r'^currencies/', include('investment_portfolio.currencies.urls', namespace='currencies')),
+    url(r'^portfolios/', include('investment_portfolio.portfolios.urls', namespace='portfolios')),
     
     url(r'^accounts/', include('allauth.urls')),
 

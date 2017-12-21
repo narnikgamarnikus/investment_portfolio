@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}Create new item{% endblock %}
+
+{% block content %}
+  <div style="display: flex; justify-content: center; align-items: center;">
+    <div style="width: 20rem; text-align: center">
+      <h1>Create new item</h1>
+      <form class="form-horizontal" method="post" action="{% url 'portfolios:item_create' %}">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <div class="control-group">
+          <div class="controls">
+            <button class="btn btn-primary" type="submit" class="btn">Create</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}

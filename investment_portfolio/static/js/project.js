@@ -19,4 +19,10 @@ Issues with the above approach:
 4. Undocumented: No mention in the documentation, or it's too hard for me to find
 */
 $('.form-group').removeClass('row');
-$('.form-control-label').remove();
+// $('.form-control-label').remove();
+$('.dateinput').pickadate({
+	formatSubmit: 'mm-dd-yyyy',
+	max: true
+});
+$('.select').removeClass('form-control');
+$('.select').material_select();
