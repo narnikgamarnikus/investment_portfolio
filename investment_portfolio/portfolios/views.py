@@ -29,8 +29,18 @@ class PortfolioItemCreateView(LoginRequiredMixin, CreateView):
     form_class = PortfolioItemForm
     
     def form_valid(self, form):
-        form.instance.user = self.request.user
-        return super(WebsiteCreateView, self).form_valid(form)
+        #print(self.request.POST)
+        
+        form.instance.user_id = self.request.user.id
+        form.instance.invest_date = self.request.POST['invest_date_submit']
+        print(self.request.POST['invest_date_submit'])
+        print(form.instance)
+        
+        return super(PortfolioItemCreateView, self).form_valid(form)
+
+    def form_invalid(self, form):
+        #print(self.request.POST)
+        return super(PortfolioItemCreateView, self).form_invalid(form)
 
 
 

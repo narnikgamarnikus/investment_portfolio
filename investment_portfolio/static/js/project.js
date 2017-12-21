@@ -21,7 +21,9 @@ Issues with the above approach:
 $('.form-group').removeClass('row');
 // $('.form-control-label').remove();
 $('.dateinput').pickadate({
-	formatSubmit: 'mm-dd-yyyy',
+	// format: 'yyyy-mm-dd',
+	// format: 'You selecte!d: dddd, dd mmm, yyyy',
+	formatSubmit: 'yyyy-mm-dd',
 	max: true
 });
 $('.select').removeClass('form-control');
