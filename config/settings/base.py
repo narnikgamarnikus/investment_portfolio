@@ -49,6 +49,8 @@ THIRD_PARTY_APPS = [
     'allauth',  # registration
     'allauth.account',  # registration
     'allauth.socialaccount',  # registration
+
+    'djmoney' # django money https://github.com/django-money/django-money
 ]
 
 # Apps specific for this project go here.

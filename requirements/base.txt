@@ -53,3 +53,4 @@ django-compressor==2.2
 
 
 # Your custom requirements go here
+djmoney

@@ -8,6 +8,7 @@ from django.conf import settings
 from model_utils.fields import StatusField
 from investment_portfolio.currencies.models import CurrencyData
 from django.utils.timezone import datetime
+from djmoney.models.fields import MoneyField
 
 
 @python_2_unicode_compatible
@@ -30,7 +31,7 @@ class PortfolioItem(Base):
 	@property
 	def price_usd(self):
 		current_usd_price = CurrencyData.objects.filter(currency=self.currency).last()
-		return current_usd_price * self.amount
+		return current_usd_price.price_usd * self.amount
 
 
 	@property
@@ -47,17 +48,9 @@ class PortfolioItem(Base):
 	@property
 	def profit(self):
 		profit = 0
-		print(self.transactions)
 		for transaction in self.transactions.filter(transaction_type = 'buy'):
 			profit += transaction.amount
-		print(profit)
 		return profit
-
-	@property
-	def dataset(self):
-		import random
-		return [random.randint(i, 50) for i in range(7)]
-		#return [data.price_usd * self.amount for data in CurrencyData.objects.filter(currency=self.currency)]
 
 	class Meta:
 		unique_together = (("user", "currency"),)
@@ -79,6 +72,8 @@ class PortfolioTransaction(Base):
 	transaction_type = StatusField()
 	item = models.ForeignKey(PortfolioItem, related_name='transactions', blank=False, null=False)
 	amount = models.FloatField(blank=False, null=False)
+	price = MoneyField(max_digits=10, decimal_places=2, default_currency='USD')
+	invest_date = models.DateField(blank=False, null=False)
 
 	@property
 	def profit(self):
