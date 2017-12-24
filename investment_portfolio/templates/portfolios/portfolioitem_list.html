@@ -2,10 +2,16 @@
 
 {% block content %}
 
-  <div class="mb-5" style="display: flex; justify-content: flex-end;">
-    <a class="btn btn-primary" href="{% url 'portfolios:item_create' %}" role="button">Add new item</a>
+<div class="row mb-5">
+  <div style="width: 30rem">
+    <canvas id="doughnutChart"></canvas>
   </div>
 
+  <!--div class="com-md-4">
+    <a class="btn btn-primary" href="{% url 'portfolios:item_create' %}" role="button">Add new item</a>
+  </div-->
+
+</div>
 <div class="row">
 
   <!-- First column -->
@@ -13,10 +19,12 @@
 
     <!-- Navigation -->
     <div class="list-group" id="list-tab" role="tablist">
-      <a class="list-group-item list-group-item-action active" id="list-home-list" data-toggle="list" href="#list-home" role="tab" aria-controls="home">Home</a>
-      <a class="list-group-item list-group-item-action" id="list-profile-list" data-toggle="list" href="#list-profile" role="tab" aria-controls="profile">Profile</a>
-      <a class="list-group-item list-group-item-action" id="list-messages-list" data-toggle="list" href="#list-messages" role="tab" aria-controls="messages">Messages</a>
-      <a class="list-group-item list-group-item-action" id="list-settings-list" data-toggle="list" href="#list-settings" role="tab" aria-controls="settings">Settings</a>
+      {% for item in portfolioitem_list %}
+      <a class="list-group-item list-group-item-action {% if forloop.first %}active{% endif%}" id="list-{{ item.currency }}-list" data-toggle="list" href="#list-{{ item.currency }}" role="tab" aria-controls="{{ item.currency }}">
+        <img src="https://files.coinmarketcap.com/static/img/coins/32x32/{{ item.currency }}.png">
+        {{ item.currency }}
+      </a>
+      {% endfor %}
     </div>
     <!-- Navigation -->
 
@@ -28,10 +36,14 @@
 
     <!-- Content -->
     <div class="tab-content" id="nav-tabContent">
-      <div class="tab-pane fade show active" id="list-home" role="tabpanel" aria-labelledby="list-home-list">...</div>
-      <div class="tab-pane fade" id="list-profile" role="tabpanel" aria-labelledby="list-profile-list">...</div>
+      {% for item in portfolioitem_list %}
+      <div class="tab-pane fade {% if forloop.first %}show active{% endif %}" id="list-{{ item.currency }}" role="tabpanel" aria-labelledby="list-{{ item.currency }}-list">
+        <canvas id="{{ item.currency }}LineChart"></canvas>                                           
+      </div>
+      {% endfor %}
+      <!--div class="tab-pane fade" id="list-profile" role="tabpanel" aria-labelledby="list-profile-list">...</div>
       <div class="tab-pane fade" id="list-messages" role="tabpanel" aria-labelledby="list-messages-list">...</div>
-      <div class="tab-pane fade" id="list-settings" role="tabpanel" aria-labelledby="list-settings-list">...</div>
+      <div class="tab-pane fade" id="list-settings" role="tabpanel" aria-labelledby="list-settings-list">...</div-->
     </div>
     <!-- Content -->
 
@@ -40,3 +52,69 @@
 
 </div>
 {% endblock content %}
+
+{% block include_javascript %}
+<script type="text/javascript">
+
+
+//doughnut
+var ctxD = document.getElementById("doughnutChart").getContext('2d');
+var myLineChart = new Chart(ctxD, {
+    type: 'doughnut',
+    data: {
+        labels: ["Red", "Green", "Yellow", "Grey", "Dark Grey"],
+        datasets: [
+            {
+                data: [300, 50, 100, 40, 120],
+                backgroundColor: ["#F7464A", "#46BFBD", "#FDB45C", "#949FB1", "#4D5360"],
+                hoverBackgroundColor: ["#FF5A5E", "#5AD3D1", "#FFC870", "#A8B3C5", "#616774"]
+            }
+        ]
+    },
+    options: {
+        responsive: true
+    }    
+});
+            
+
+{% for item in portfolioitem_list %}
+
+var ctxL = document.getElementById("{{ item.currency }}LineChart").getContext('2d');
+/*
+var minPrice = {{ item.min_price }}
+var maxPrice = {{ item.max_price }}
+var deltaPrice = maxPrice - minPrice
+var avgPrice = deltaPrice / 6
+var prices = []
+
+for (var i = 0; i < 6; i++) {
+  prices.push(minPrice += avgPrice)
+}
+
+alert(prices)
+*/
+
+var myLineChart = new Chart(ctxL, {
+    type: 'line',
+    data: {
+        labels: ["January", "February", "March", "April", "May", "June", "July"],
+        datasets: [
+            {
+                label: "My First dataset",
+                fillColor: "rgba(220,220,220,0.2)",
+                strokeColor: "rgba(220,220,220,1)",
+                pointColor: "rgba(220,220,220,1)",
+                pointStrokeColor: "#fff",
+                pointHighlightFill: "#fff",
+                pointHighlightStroke: "rgba(220,220,220,1)",
+                data: {{ item.dataset }}
+            }
+        ]
+    },
+    options: {
+        responsive: true
+    }    
+});
+{% endfor %}
+</script>
+{% endblock include_javascript %}

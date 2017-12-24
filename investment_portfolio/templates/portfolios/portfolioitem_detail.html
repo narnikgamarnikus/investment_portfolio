@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block content %}
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+{{ object.amount }}
+<img src="https://files.coinmarketcap.com/static/img/coins/32x32/{{ object.currency }}.png">
+
+{% if transactions %}
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>{% trans 'Amount' %}</th>
+      <th>{% trans 'Transaction type' %}</th>
+      <th>{% trans 'Date' %}</th>
+      <th>{% trans 'Profit' %}</th>
+    </tr>
+  </thead>
+  <tbody>
+  	{% for transaction in transactions %}
+    <tr>
+      <th scope="row">{{ transaction.id }}</th>
+      <td>{{ transaction.amount }}</td>
+      <td>{{ transaction.transaction_type }}</td>
+      <td>{{ transaction.created }}</td>
+      <td>{{ transaction.profit }}%</td>
+    </tr>
+    {% endfor %}
+    <tr>
+    	<th></th>
+    	<th>{{ object.amount }}</th>
+    	<th></th>
+    	<th></th>
+    	<th>{{ object.profit }}</th>
+    </tr>
+  </tbody>
+</table>
+                 
+{% endif %}                   
+
+{% endblock content %}

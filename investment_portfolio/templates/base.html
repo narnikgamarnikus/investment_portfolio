@@ -1,4 +1,4 @@
-{% load static i18n compress%}<!DOCTYPE html>
+{% load static i18n compress %}<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8">
@@ -61,9 +61,20 @@
                       <li class="nav-item {% if request.path == '/'|add:LANGUAGE_CODE|add:'/'%}active{% endif %}">
                           <a class="nav-link" href="{% url 'home' %}">{% trans 'Home' %}<span class="sr-only">(current)</span></a>
                       </li>
-                      <li class="nav-item {% if request.path == '/'|add:LANGUAGE_CODE|add:'/portfolios/'%}active{% endif %}">
+                      {% if user.is_authenticated %}
+                      <!--li class="nav-item {% if request.path == '/'|add:LANGUAGE_CODE|add:'/portfolios/'%}active{% endif %}">
                           <a class="nav-link" href="{% url 'portfolios:item_list' %}">{% trans 'Portfolio' %}</a>
-                      </li>                      
+                      </li-->
+
+                      <li class="nav-item dropdown">
+                          <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{% trans 'Portfolio' %}</a>
+                          <div class="dropdown-menu dropdown-primary" aria-labelledby="navbarDropdownMenuLink">
+                              <a class="dropdown-item {% if request.path == '/'|add:LANGUAGE_CODE|add:'/portfolios/items'%}active{% endif %}" href="{% url 'portfolios:item_list' %}">My portfolio</a>
+                              <a class="dropdown-item {% if request.path == '/'|add:LANGUAGE_CODE|add:'/portfolios/items/~create/'%}active{% endif %}" href="{% url 'portfolios:item_create' %}">Add new item</a>
+                          </div>
+                      </li>
+
+                      {% endif %}
                       <li class="nav-item {% if request.path == '/'|add:LANGUAGE_CODE|add:'/about/'%}active{% endif %}">
                           <a class="nav-link" href="{% url 'about' %}">{% trans 'About' %}</a>
                       </li>

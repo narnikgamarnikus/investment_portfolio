@@ -10,6 +10,10 @@ class PortfolioItemDetailView(LoginRequiredMixin, DetailView):
     
     model = PortfolioItem
 
+    def get_context_data(self, **kwargs):
+        context = super(PortfolioItemDetailView, self).get_context_data(**kwargs)
+        context['transactions'] = PortfolioTransaction.objects.filter(item=self.object)
+        return context
 
 class PortfolioItemUpdateView(LoginRequiredMixin, UpdateView):
 
@@ -25,23 +29,11 @@ class PortfolioItemListView(LoginRequiredMixin, ListView):
 class PortfolioItemCreateView(LoginRequiredMixin, CreateView):
 
     model = PortfolioItem
-    #fields = ['currency', 'amount', 'invest_date']
     form_class = PortfolioItemForm
     
     def form_valid(self, form):
-        #print(self.request.POST)
-        
         form.instance.user_id = self.request.user.id
-        form.instance.invest_date = self.request.POST['invest_date_submit']
-        print(self.request.POST['invest_date_submit'])
-        print(form.instance)
-        
         return super(PortfolioItemCreateView, self).form_valid(form)
-
-    def form_invalid(self, form):
-        #print(self.request.POST)
-        return super(PortfolioItemCreateView, self).form_invalid(form)
-
 
 
 class PortfolioTransactionDetailView(LoginRequiredMixin, DetailView):

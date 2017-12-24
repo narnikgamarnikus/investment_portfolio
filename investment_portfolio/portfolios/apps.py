@@ -6,8 +6,4 @@ class PortfoliosConfig(AppConfig):
     verbose_name = "Portfolios"
 
     def ready(self):
-        """Override this to put in:
-            Users system checks
-            Users signal registration
-        """
-        pass
+    	import investment_portfolio.portfolios.signals

@@ -12,7 +12,7 @@ class Command(BaseCommand):
 
 	def handle(self, *args, **options):
 
-		response = requests.get('https://api.coinmarketcap.com/v1/ticker/')
+		response = requests.get('https://api.coinmarketcap.com/v1/ticker/?limit=0')
 
 		for currency in response.json():
 			new_currency, created = Currency.objects.get_or_create(
