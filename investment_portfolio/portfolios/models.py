@@ -25,19 +25,18 @@ class PortfolioItem(Base):
 
 	currency = models.ForeignKey('currencies.Currency')
 	user = models.ForeignKey(settings.AUTH_USER_MODEL)
-	amount = models.FloatField(blank=False, null=False)
-	invest_date = models.DateField(blank=False, null=False)
+	#amount = models.FloatField(blank=False, null=False)
+	#invest_date = models.DateField(blank=False, null=False)
 
 	@property
 	def price_usd(self):
 		current_usd_price = CurrencyData.objects.filter(currency=self.currency).last()
-		return current_usd_price.price_usd * self.amount
-
+		return current_usd_price.price_usd
 
 	@property
 	def portfolios_total_amount(self):
 		total_amount = 0
-		for item in PortfolioItem.objects.all():
+		for item in PortfolioItem.objects.filter(user = self.user):
 			total_amount += item.current_usd_price
 		return total_amount
 

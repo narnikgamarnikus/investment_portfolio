@@ -295,3 +295,15 @@ ADMIN_URL = r'^admin/'
 
 # Your common stuff: Below this line define 3rd party library settings
 # ------------------------------------------------------------------------------
+
+
+from datetime import timedelta
+
+CELERYBEAT_SCHEDULE = {
+    'parse-currency-data-every-60-minutes': {
+        'task': 'investment_portfolio.currencies.tasks.parse_currencies',
+        'schedule': timedelta(seconds=60*60)
+    },
+}
+
+CELERY_TIMEZONE = 'UTC'

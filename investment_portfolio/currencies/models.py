@@ -23,7 +23,7 @@ class Currency(Base):
 	name = models.CharField(_('Name of currency'), blank=True, max_length=255, 
 													unique=True)
 	symbol = models.CharField(_('Symbol of currency'), blank=False, null=False, 
-														max_length=10, unique=True)
+														max_length=10)
 
 	def __str__(self):
 		return self.name

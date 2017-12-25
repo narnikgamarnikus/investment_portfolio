@@ -33,6 +33,12 @@ class PortfolioItemCreateView(LoginRequiredMixin, CreateView):
     
     def form_valid(self, form):
         form.instance.user_id = self.request.user.id
+        first_transaction = PortfolioTransaction.objects.create(
+                                                item = self.object,
+                                                invest_date = self.request['invest_date'],
+                                                amount = self.request['amount'],
+                                                price = self.request['price'],
+                                                transaction_type = 'buy')
         return super(PortfolioItemCreateView, self).form_valid(form)
 
 

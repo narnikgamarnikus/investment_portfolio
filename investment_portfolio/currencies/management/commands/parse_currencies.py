@@ -19,6 +19,6 @@ class Command(BaseCommand):
 				name = currency['id'],
 				symbol = currency['symbol']
 				)
-
+			
 			if created:
 				logger.info("Currency %d create successfull", new_currency.name)
