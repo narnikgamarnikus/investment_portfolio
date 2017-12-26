@@ -296,7 +296,7 @@ ADMIN_URL = r'^admin/'
 # Your common stuff: Below this line define 3rd party library settings
 # ------------------------------------------------------------------------------
 
-
+'''
 from datetime import timedelta
 
 CELERYBEAT_SCHEDULE = {
@@ -307,3 +307,4 @@ CELERYBEAT_SCHEDULE = {
 }
 
 CELERY_TIMEZONE = 'UTC'
+'''

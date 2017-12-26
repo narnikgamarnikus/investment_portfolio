@@ -21,24 +21,36 @@ class Base(SoftDeletableModel, TimeStampedModel):
 
 
 @python_2_unicode_compatible
+class Color(Base):
+	color = models.CharField(blank=False, null=False, max_length=55, default='#ffffff')
+	color_class = models.CharField(blank=False, null=False, max_length=55, default='white') 
+
+	def __str__(self):
+		return self.color 
+
+
+@python_2_unicode_compatible
 class PortfolioItem(Base):
 
 	currency = models.ForeignKey('currencies.Currency')
-	user = models.ForeignKey(settings.AUTH_USER_MODEL)
-	#amount = models.FloatField(blank=False, null=False)
-	#invest_date = models.DateField(blank=False, null=False)
+	user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='portfolio_items')
+	color = models.ForeignKey(Color, blank=False, null=True)
+
+	@property
+	def amount(self):
+		total_amount = 0
+		for transaction in self.transactions:
+			total_amount += transaction.amount
+		return total_amount
 
 	@property
 	def price_usd(self):
-		current_usd_price = CurrencyData.objects.filter(currency=self.currency).last()
-		return current_usd_price.price_usd
-
-	@property
-	def portfolios_total_amount(self):
-		total_amount = 0
-		for item in PortfolioItem.objects.filter(user = self.user):
-			total_amount += item.current_usd_price
-		return total_amount
+		currency_data = CurrencyData.objects.filter(currency=self.currency).last()
+		if currency_data:
+			return currency_data.price_usd * self.amount
+		else:
+			import random
+			return random.randint(1,9999)
 
 	@property
 	def portfolio_percent(self):
@@ -48,7 +60,7 @@ class PortfolioItem(Base):
 	def profit(self):
 		profit = 0
 		for transaction in self.transactions.filter(transaction_type = 'buy'):
-			profit += transaction.amount
+			profit += transaction.profit
 		return profit
 
 	class Meta:
@@ -73,6 +85,15 @@ class PortfolioTransaction(Base):
 	amount = models.FloatField(blank=False, null=False)
 	price = MoneyField(max_digits=10, decimal_places=2, default_currency='USD')
 	invest_date = models.DateField(blank=False, null=False)
+
+	@property
+	def price_usd(self):
+		currency_data = CurrencyData.objects.filter(currency=self.item.currency).last()
+		if currency_data:
+			return self.amount * currency_data.price_usd	
+		else:
+			import random
+			return random.randint(1,9999)
 
 	@property
 	def profit(self):

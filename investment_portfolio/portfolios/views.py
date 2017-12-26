@@ -5,6 +5,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import PortfolioItem, PortfolioTransaction
 from .forms import PortfolioItemForm
+from djmoney.money import Money
+
 
 class PortfolioItemDetailView(LoginRequiredMixin, DetailView):
     
@@ -33,11 +35,15 @@ class PortfolioItemCreateView(LoginRequiredMixin, CreateView):
     
     def form_valid(self, form):
         form.instance.user_id = self.request.user.id
+        form.save()
         first_transaction = PortfolioTransaction.objects.create(
-                                                item = self.object,
-                                                invest_date = self.request['invest_date'],
-                                                amount = self.request['amount'],
-                                                price = self.request['price'],
+                                                item_id = form.instance.id,
+                                                invest_date = self.request.POST['invest_date'],
+                                                amount = self.request.POST['amount'],
+                                                price = Money(
+                                                    self.request.POST['price_0'],
+                                                    self.request.POST['price_1']
+                                                    ),
                                                 transaction_type = 'buy')
         return super(PortfolioItemCreateView, self).form_valid(form)
 

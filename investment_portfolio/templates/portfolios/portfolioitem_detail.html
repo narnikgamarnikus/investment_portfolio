@@ -20,6 +20,7 @@
       <th>{% trans 'Amount' %}</th>
       <th>{% trans 'Transaction type' %}</th>
       <th>{% trans 'Date' %}</th>
+      <th>{% trans 'In USD' %}</th>      
       <th>{% trans 'Profit' %}</th>
     </tr>
   </thead>
@@ -30,6 +31,7 @@
       <td>{{ transaction.amount }}</td>
       <td>{{ transaction.transaction_type }}</td>
       <td>{{ transaction.created }}</td>
+      <td>{{ transaction.price_usd }}</td>
       <td>{{ transaction.profit }}%</td>
     </tr>
     {% endfor %}
@@ -38,6 +40,7 @@
     	<th>{{ object.amount }}</th>
     	<th></th>
     	<th></th>
+      <th>{{ object.price_usd }}</th>
     	<th>{{ object.profit }}</th>
     </tr>
   </tbody>

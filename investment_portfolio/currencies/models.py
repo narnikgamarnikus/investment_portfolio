@@ -4,6 +4,8 @@ from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 from model_utils.models import TimeStampedModel, SoftDeletableModel
 from model_utils import Choices, FieldTracker
+from .utils import htmlcolor
+from django.utils.functional import cached_property
 
 
 @python_2_unicode_compatible

@@ -2,6 +2,8 @@ from django import forms
 from .models import PortfolioItem
 from investment_portfolio.currencies.models import Currency
 from djmoney.forms.fields import MoneyField
+from .models import Color
+
 
 class PortfolioItemForm(forms.ModelForm):
 
@@ -11,8 +13,9 @@ class PortfolioItemForm(forms.ModelForm):
 
 	class Meta:
 		model = PortfolioItem
-		fields = ['currency']
+		fields = ['currency', 'color']
 
 	def __init__(self, *args, **kwargs):
 		super(PortfolioItemForm, self).__init__(*args, **kwargs)
 		self.fields['currency'].queryset = Currency.objects.all()
+		self.fields['color'].queryset = Color.objects.all()

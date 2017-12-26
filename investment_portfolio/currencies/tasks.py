@@ -1,6 +1,9 @@
 from .models import Currency, CurrencyData
+import datetime
+from celery.task.base import periodic_task
 
 
+@periodic_task(run_every=datetime.timedelta(seconds=60*60))
 def parse_currencies():
 		response = requests.get('https://api.coinmarketcap.com/v1/ticker/?limit=0')
 

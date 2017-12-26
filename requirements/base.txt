@@ -54,3 +54,4 @@ django-compressor==2.2
 
 # Your custom requirements go here
 django-money # https://github.com/django-money/django-money
+bs4 # BeautifulSoup for parse colors
