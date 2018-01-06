@@ -50,7 +50,7 @@ class PortfolioItem(Base):
 			return round(currency_data.price_usd * self.amount, 2)
 		else:
 			import random
-			return 1#random.randint(1,9999)
+			return random.randint(1,9999)
 
 	@property
 	def portfolio_percent(self):
