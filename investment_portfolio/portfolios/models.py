@@ -39,7 +39,7 @@ class PortfolioItem(Base):
 	@property
 	def amount(self):
 		total_amount = 0
-		for transaction in self.transactions:
+		for transaction in self.transactions.all():
 			total_amount += transaction.amount
 		return total_amount
 
@@ -47,10 +47,10 @@ class PortfolioItem(Base):
 	def price_usd(self):
 		currency_data = CurrencyData.objects.filter(currency=self.currency).last()
 		if currency_data:
-			return currency_data.price_usd * self.amount
+			return round(currency_data.price_usd * self.amount, 2)
 		else:
 			import random
-			return random.randint(1,9999)
+			return 1#random.randint(1,9999)
 
 	@property
 	def portfolio_percent(self):

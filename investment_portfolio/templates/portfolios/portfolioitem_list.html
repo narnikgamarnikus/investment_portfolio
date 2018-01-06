@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% load i18n %}
 {% block content %}
 
 <div class="row mb-5" style="display: flex; justify-content: center">
@@ -40,7 +40,8 @@
     <div class="tab-content" id="nav-tabContent">
       {% for item in portfolioitem_list %}
       <div class="tab-pane fade {% if forloop.first %}show active{% endif %}" id="list-{{ item.currency }}" role="tabpanel" aria-labelledby="list-{{ item.currency }}-list">
-        <canvas id="{{ item.currency }}LineChart"></canvas>                                           
+        <a class="btn btn-primary" type="submit" href="{% url 'portfolios:item_detail' item.pk %}">{% trans 'View detail' %}</a>
+        <canvas id="{{ item.currency }}LineChart"></canvas>
       </div>
       {% endfor %}
       <!--div class="tab-pane fade" id="list-profile" role="tabpanel" aria-labelledby="list-profile-list">...</div>
@@ -61,11 +62,11 @@
 
 //doughnut
 var ctxD = document.getElementById("doughnutChart").getContext('2d');
-var labels = [{% for item in portfolioitem_list %}"{{ item.currency }}"{% if not forloop.last %},{% endif %} {% endfor %}]
-var data = [{% for item in portfolioitem_list %}"{{ item.price_usd }}"{% if not forloop.last %},{% endif %} {% endfor %}]
+var labels = [{% for item in portfolioitem_list %}'{{ item.currency }}'{% if not forloop.last %},{% endif %} {% endfor %}]
+var data = [{% for item in portfolioitem_list %}'{{ item.price_usd }}'.replace(',', '.'){% if not forloop.last %},{% endif %} {% endfor %}]
 
-var backgroundColors = [{% for item in portfolioitem_list %}"{{ item.color }}"{% if not forloop.last %},{% endif %}{% endfor %}]
-var hoverBackgroundColor = [{% for item in portfolioitem_list %}"{{ item.currency.hover_bacground_color }}"{% if not forloop.last %},{% endif %} {% endfor %}]
+var backgroundColors = [{% for item in portfolioitem_list %}'{{ item.color }}'{% if not forloop.last %},{% endif %}{% endfor %}]
+var hoverBackgroundColor = [{% for item in portfolioitem_list %}'{{ item.currency.hover_bacground_color }}'{% if not forloop.last %},{% endif %} {% endfor %}]
 
 var myLineChart = new Chart(ctxD, {
     type: 'doughnut',
@@ -81,7 +82,7 @@ var myLineChart = new Chart(ctxD, {
     },
     options: {
         responsive: true
-    }    
+    }
 });
             
 
@@ -101,21 +102,21 @@ for (var i = 0; i < 6; i++) {
 
 alert(prices)
 */
-
+var data = [{% for date in item.currency.currency_data.all %}'{{ date.price_usd }}'.replace(',', '.'){% if not forloop.last %},{% endif %} {% endfor %}]
 var myLineChart = new Chart(ctxL, {
     type: 'line',
     data: {
-        labels: ["January", "February", "March", "April", "May", "June", "July"],
+        labels: [{% for data in item.currency.currency_data.all %}'{{ data.created }}'{% if not forloop.last %},{% endif %} {% endfor %}],
         datasets: [
             {
-                label: "My First dataset",
+                label: "{{ item.currency }}",
                 fillColor: "rgba(220,220,220,0.2)",
                 strokeColor: "rgba(220,220,220,1)",
                 pointColor: "rgba(220,220,220,1)",
                 pointStrokeColor: "#fff",
                 pointHighlightFill: "#fff",
                 pointHighlightStroke: "rgba(220,220,220,1)",
-                data: [65, 59, 80, 81, 56, 55, 40]
+                data: data
             }
         ]
     },
