@@ -59,6 +59,7 @@ LOCAL_APPS = [
     'investment_portfolio.users.apps.UsersConfig',
     'investment_portfolio.currencies.apps.CurrenciesConfig',
     'investment_portfolio.portfolios.apps.PortfoliosConfig',
+    'investment_portfolio.notifications.apps.NotificationsConfig',
     # Your stuff: custom apps go here
 ]
 

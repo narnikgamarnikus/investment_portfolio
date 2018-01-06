@@ -98,12 +98,12 @@ class PortfolioTransaction(Base):
 	@property
 	def profit(self):
 		today = datetime.today()
-		#created_currency_date = CurrencyData.objects.filter(created=self.created,
-		#											currency=self.item.currency)
-		#today_currency_date = CurrencyData.objects.filter(created__gte=self.created,
-		#											currency=self.item.currency)
-		created_currency_date = 10.000
-		today_currency_date = 15.000
+		created_currency_date = CurrencyData.objects.filter(created=self.created,
+													currency=self.item.currency)
+		today_currency_date = CurrencyData.objects.filter(created__gte=self.created,
+													currency=self.item.currency)
+		#created_currency_date = 10.000
+		#today_currency_date = 15.000
 		return ((today_currency_date - created_currency_date) / created_currency_date) * 100
 
 	def __str__(self):
